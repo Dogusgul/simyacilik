@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simya Dükkanı</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+        }
+
+        .game-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+        }
+
+        .materials {
+            margin: 20px 0;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* 4 malzeme her satırda */
+            gap: 20px;
+            justify-items: center;
+        }
+
+        .material {
+            font-size: 16px; /* Daha küçük font boyutu */
+            cursor: pointer;
+            padding: 10px;
+            background-color: #f39c12;
+            border-radius: 10px;
+            transition: transform 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center; /* İçeriği ortala */
+            width: 100px;  /* Kareyi genişlettik */
+            height: 100px; /* Kareyi genişlettik */
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .material div {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .material:hover {
+            transform: scale(1.1); /* Hover efektini büyüt */
+        }
+
+        /* Kazan Görünümü */
+        .cauldron {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #2c3e50;
+            border-radius: 50%;
+            width: 200px;
+            height: 200px;
+            position: relative;
+            margin-left: auto;
+            margin-right: auto;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 5px solid #f39c12;
+        }
+
+        .cauldron-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            max-width: 150px;
+        }
+
+        .cauldron-content div {
+            font-size: 40px;
+            margin: 5px;
+        }
+
+        #boil-btn {
+            background-color: #e74c3c;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        #boil-btn:hover {
+            background-color: #c0392b;
+        }
+
+        .inventory {
+            margin-top: 30px;
+            background-color: #2ecc71;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .inventory div {
+            margin: 5px 0;
+            background-color: #27ae60;
+            padding: 8px;
+            border-radius: 5px;
+            color: white;
+        }
+
+        /* Geçici uyarı mesajı */
+        #error-message {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: #e74c3c;
+            color: white;
+            padding: 10px;
+            font-size: 18px;
+            display: none; /* Başlangıçta gizli */
+        }
+
+        .customer {
+            position: relative;
+            background-color: transparent; /* Arka planı kaldırdık */
+            padding: 10px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 60px; /* Konumu biraz aşağıya kaydırdık */
+            cursor: pointer;
+            width: 120px;
+            height: 120px;
+            text-align: center;
+            font-size: 40px; /* Emoji boyutunu büyüttük */
+        }
+
+        .customer img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+        }
+
+        .speech-bubble {
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #3498db;
+            padding: 5px 10px;
+            border-radius: 5px;
+            color: white;
+            font-size: 14px;
+            width: 120px;
+            text-align: center;
+        }
+
+        #money {
+            margin-top: 20px;
+            font-size: 20px;
+            color: #2c3e50;
+        }
+
+        #recipe-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #recipe-button:hover {
+            background-color: #3498db;
+        }
+
+        .recipe-container {
+            display: none;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        .recipe-item {
+            margin: 10px 0;
+            font-size: 18px;
+        }
+
+        .recipe-item span {
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        <h1>Simya Dükkanı</h1>
+
+        <!-- Geçici Hata Mesajı -->
+        <div id="error-message">Bu tarif işe yaramaz!</div>
+
+        <!-- Para Miktarı -->
+        <div id="money">Para: 0 TL</div>
+
+        <!-- Malzeme Seçimleri -->
+        <div class="materials">
+            <div class="material" id="bug" onclick="addToCauldron('Uğur Böceği')">
+                <div>🐞</div>
+                <div>Uğur Böceği</div>
+            </div>
+            <div class="material" id="flower" onclick="addToCauldron('Çiçek')">
+                <div>🌸</div>
+                <div>Çiçek</div>
+            </div>
+            <div class="material" id="ant" onclick="addToCauldron('Karınca')">
+                <div>🐜</div>
+                <div>Karınca</div>
+            </div>
+            <div class="material" id="magicstone" onclick="addToCauldron('Büyülü Taş')">
+                <div>🔮</div>
+                <div>Büyülü Taş</div>
+            </div>
+            <div class="material" id="water" onclick="addToCauldron('Su Damlası')">
+                <div>💧</div>
+                <div>Su Damlası</div>
+            </div>
+            <div class="material" id="fire" onclick="addToCauldron('Ateş')">
+                <div>🔥</div>
+                <div>Ateş</div>
+            </div>
+            <div class="material" id="snake" onclick="addToCauldron('Yılan')">
+                <div>🐍</div>
+                <div>Yılan</div>
+            </div>
+            <div class="material" id="dust" onclick="addToCauldron('Büyülü Toz')">
+                <div>✨</div>
+                <div>Büyülü Toz</div>
+            </div>
+            <div class="material" id="moonlight" onclick="addToCauldron('Ay Işığı')">
+                <div>🌙</div>
+                <div>Ay Işığı</div>
+            </div>
+            <div class="material" id="mushroom" onclick="addToCauldron('Zehirli Mantar')">
+                <div>🍄</div>
+                <div>Zehirli Mantar</div>
+            </div>
+        </div>
+
+        <!-- Kazan -->
+        <div class="cauldron">
+            <h2>Kazan</h2>
+            <div class="cauldron-content" id="cauldron-content">
+                Henüz malzeme eklemediniz.
+            </div>
+        </div>
+
+        <!-- Kaynat Butonu -->
+        <button id="boil-btn" onclick="boilIngredients()">Kaynat</button>
+
+        <!-- Envanter -->
+        <div class="inventory">
+            <h2>Envanter</h2>
+            <div id="inventory-content"></div>
+        </div>
+
+        <!-- Tarifler Butonu -->
+        <button id="recipe-button" onclick="showRecipes()">İksir Tarifleri</button>
+
+        <!-- Tarifler İçeriği -->
+        <div class="recipe-container" id="recipe-container">
+            <div class="recipe-item"><span>Sağlık İksiri:</span> 🐞 + 🌸</div>
+            <div class="recipe-item"><span>Hız İksiri:</span> 🐜 + 🌸</div>
+            <div class="recipe-item"><span>Güç İksiri:</span> 🐞 + 🐜</div>
+            <div class="recipe-item"><span>Büyü İksiri:</span> 🔮 + 🌸</div>
+            <div class="recipe-item"><span>Ateş İksiri:</span> 🔥 + 🐞</div>
+            <div class="recipe-item"><span>Su İksiri:</span> 💧 + 🐜</div>
+            <div class="recipe-item"><span>Yılan İksiri:</span> 🐍 + ✨</div>
+            <div class="recipe-item"><span>Büyülü Işıltı İksiri:</span> ✨ + 🌙</div>
+            <div class="recipe-item"><span>Ay Işığı İksiri:</span> 🌙 + 🔮</div>
+            <div class="recipe-item"><span>Zehir İksiri:</span> 🍄 + 🔮</div>
+            <div class="recipe-item"><span>Buz İksiri:</span> 🍄 + 💧</div>
+            <div class="recipe-item"><span>Zenginlik İksiri:</span> ✨ + 🍄</div>
+            <div class="recipe-item"><span>Zihin Gücü İksiri:</span> 🌙 + ✨</div>
+            <div class="recipe-item"><span>Enerji İksiri:</span> 🔥 + 🍄</div>
+        </div>
+
+        <!-- Müşteriler -->
+        <div id="customers">
+            <div class="customer" onclick="sellPotion('Sağlık İksiri')">
+                <div class="speech-bubble">Sağlık İksiri istiyorum!</div>
+                <div>👨🏽</div> <!-- Müşteri Emoji -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Sesler -->
+    <audio id="material-sound" src="sounds/material-click.mp3"></audio>
+    <audio id="boil-sound" src="sounds/boil-click.mp3"></audio>
+    <audio id="customer-sound" src="sounds/customer-click.mp3"></audio>
+
+    <script>
+        const availableEmojis = ['👩🏻', '👨🏽', '👩🏿‍🦱', '👨🏼', '👵🏻', '👴🏽', '🧑🏻', '🧑🏼', '🧑🏽', '👩🏽', '👨🏻'];
+        const availablePotions = [
+            'Sağlık İksiri', 
+            'Hız İksiri', 
+            'Güç İksiri', 
+            'Büyü İksiri', 
+            'Ateş İksiri', 
+            'Su İksiri', 
+            'Yılan İksiri', 
+            'Büyülü Işıltı İksiri', 
+            'Ay Işığı İksiri', 
+            'Zehir İksiri', 
+            'Buz İksiri', 
+            'Zenginlik İksiri', 
+            'Zihin Gücü İksiri', 
+            'Enerji İksiri'
+        ];
+
+        const stories = {
+            'Sağlık İksiri': [
+                "Sonunda sağlığıma kavuşacağım! O kadar uzun zamandır hastaydım ki, bir yudum Sağlık İksiri her şeyi değiştirecek!",
+                "Gece boyunca uyumadım, bedenim yorgun. Sağlık İksiri bana yeniden güç verebilir mi?"
+            ],
+            'Hız İksiri': [
+                "Çok acelem var! Hızlıca görevimi tamamlamak zorundayım, belki bu iksir bana yardımcı olur.",
+                "Yavaş olmak zorunda değilim! Hız İksiriyle hızlıca gitmem gereken yere ulaşacağım."
+            ],
+            'Güç İksiri': [
+                "Fiziksel gücümü artırmam gerekiyor, bir mücadeleye hazırlık yapıyorum ve bu iksir bana büyük bir avantaj sağlar.",
+                "Yıllardır güçsüz hissediyorum, bir miktar güç kazanmak artık elzem oldu."
+            ],
+            'Büyü İksiri': [
+                "Büyü yapmak istiyorum, ama gücüm yetmiyor! Bu iksir beni büyü yeteneklerimi geliştirebilir.",
+                "Bir büyücü olmayı hep hayal ettim. Belki bu iksirle o hayalim gerçek olur."
+            ],
+            'Ateş İksiri': [
+                "Bazen ateş, ruhumu ısıtacak tek şey oluyor. Biraz da cesaret isterim, bu iksir bana yardımcı olabilir.",
+                "Bunu almak zorundayım! Ateşin gücünü hissetmek ve çevremdeki dünyayı aydınlatmak istiyorum."
+            ],
+            'Zihin Gücü İksiri': [
+                "Zihinsel engellerim var, bu iksirle düşünme kapasitemi artırıp sorunları çözmeyi umuyorum.",
+                "Bazen zihnim çok dağılmış hissediyorum, bu iksir bana netlik ve odaklanma sağlayacak."
+            ],
+            'Zehir İksiri': [
+                "Zehir, çok güçlü bir silah olabilir... ama sadece doğru şekilde kullanıldığında. Bu iksir, düşmanlarımı etkisiz hale getirebilir.",
+                "Bazen bazı şeyleri yok etmem gerek, bu zehir iksiriyle her şeyi temizleyeceğim."
+            ],
+            'Buz İksiri': [
+                "Bazen soğukkanlılık her şeydir, bu Buz İksiri sayesinde zor anları daha kolay atlatabilirim.",
+                "Sıcak bir ortamda çok zorlandım, bu iksirle biraz serinlik bulabilirim."
+            ]
+        };
+
+        let cauldronContents = []; // Kazandaki malzemeler
+        let inventory = {}; // Envanterdeki iksirler
+        let money = 0; // Kazanılan para
+
+        // Sesleri çal
+        function playSound(soundId) {
+            document.getElementById(soundId).play();
+        }
+
+        // Kazana malzeme ekle
+        function addToCauldron(item) {
+            cauldronContents.push(item);
+            updateCauldronContent();
+            playSound('material-sound'); // Malzeme tıklama sesi
+        }
+
+        // Kazanın içeriğini güncelle
+        function updateCauldronContent() {
+            const cauldronContentDiv = document.getElementById('cauldron-content');
+            cauldronContentDiv.innerHTML = ''; // Mevcut içeriği temizle
+
+            // Kazandaki malzemeleri emoji olarak göster
+            cauldronContents.forEach((item) => {
+                const emojiDiv = document.createElement('div');
+                let emoji;
+
+                switch(item) {
+                    case 'Uğur Böceği':
+                        emoji = '🐞';
+                        break;
+                    case 'Çiçek':
+                        emoji = '🌸';
+                        break;
+                    case 'Karınca':
+                        emoji = '🐜';
+                        break;
+                    case 'Büyülü Taş':
+                        emoji = '🔮';
+                        break;
+                    case 'Su Damlası':
+                        emoji = '💧';
+                        break;
+                    case 'Ateş':
+                        emoji = '🔥';
+                        break;
+                    case 'Yılan':
+                        emoji = '🐍';
+                        break;
+                    case 'Büyülü Toz':
+                        emoji = '✨';
+                        break;
+                    case 'Ay Işığı':
+                        emoji = '🌙';
+                        break;
+                    case 'Zehirli Mantar':
+                        emoji = '🍄';
+                        break;
+                }
+
+                emojiDiv.textContent = emoji;
+                cauldronContentDiv.appendChild(emojiDiv);
+            });
+        }
+
+        // Kaynatma işlemi
+        function boilIngredients() {
+            const potion = createPotion(cauldronContents);
+            if (potion) {
+                // İksir başarılı bir şekilde oluşturuldu
+                if (!inventory[potion]) {
+                    inventory[potion] = 0;
+                }
+                inventory[potion]++;
+                cauldronContents = []; // Kazandaki malzemeleri temizle
+                updateCauldronContent();
+                updateInventory();
+                playSound('boil-sound'); // Kaynatma sesi
+            } else {
+                showError(); // Hatalı karışım, mesaj göster ve kazanı temizle
+                cauldronContents = []; // Kazan içeriğini temizle
+                updateCauldronContent();
+            }
+        }
+
+        // Karışımları kontrol et ve iksir oluştur
+        function createPotion(ingredients) {
+            // Tam karışımlar
+            if (ingredients.includes('Uğur Böceği') && ingredients.includes('Çiçek') && ingredients.length === 2) {
+                return 'Sağlık İksiri';
+            }
+            if (ingredients.includes('Karınca') && ingredients.includes('Çiçek') && ingredients.length === 2) {
+                return 'Hız İksiri';
+            }
+            if (ingredients.includes('Uğur Böceği') && ingredients.includes('Karınca') && ingredients.length === 2) {
+                return 'Güç İksiri';
+            }
+            if (ingredients.includes('Büyülü Taş') && ingredients.includes('Çiçek') && ingredients.length === 2) {
+                return 'Büyü İksiri';
+            }
+            if (ingredients.includes('Ateş') && ingredients.includes('Uğur Böceği') && ingredients.length === 2) {
+                return 'Ateş İksiri';
+            }
+            if (ingredients.includes('Su Damlası') && ingredients.includes('Karınca') && ingredients.length === 2) {
+                return 'Su İksiri';
+            }
+            if (ingredients.includes('Yılan') && ingredients.includes('Büyülü Toz') && ingredients.length === 2) {
+                return 'Yılan İksiri';
+            }
+            if (ingredients.includes('Büyülü Toz') && ingredients.includes('Ay Işığı') && ingredients.length === 2) {
+                return 'Büyülü Işıltı İksiri';
+            }
+            if (ingredients.includes('Ay Işığı') && ingredients.includes('Büyülü Taş') && ingredients.length === 2) {
+                return 'Ay Işığı İksiri';
+            }
+            if (ingredients.includes('Zehirli Mantar') && ingredients.includes('Büyülü Taş') && ingredients.length === 2) {
+                return 'Zehir İksiri';
+            }
+            if (ingredients.includes('Zehirli Mantar') && ingredients.includes('Su Damlası') && ingredients.length === 2) {
+                return 'Buz İksiri';
+            }
+            if (ingredients.includes('Büyülü Toz') && ingredients.includes('Zehirli Mantar') && ingredients.length === 2) {
+                return 'Zenginlik İksiri';
+            }
+            if (ingredients.includes('Ay Işığı') && ingredients.includes('Büyülü Toz') && ingredients.length === 2) {
+                return 'Zihin Gücü İksiri';
+            }
+            if (ingredients.includes('Ateş') && ingredients.includes('Zehirli Mantar') && ingredients.length === 2) {
+                return 'Enerji İksiri';
+            }
+            return null; // Eğer karışım geçerli değilse
+        }
+
+        // Envanteri güncelle
+        function updateInventory() {
+            const inventoryContent = document.getElementById('inventory-content');
+            inventoryContent.innerHTML = '';
+            for (let potion in inventory) {
+                if (inventory[potion] > 0) { // Eğer envanterde varsa, 0 olmayanları göster
+                    const potionElement = document.createElement('div');
+                    potionElement.textContent = `${potion}: ${inventory[potion]}`;
+                    inventoryContent.appendChild(potionElement);
+                }
+            }
+        }
+
+        // Hata mesajını göster
+        function showError() {
+            const errorMessage = document.getElementById('error-message');
+            errorMessage.style.display = 'block'; // Mesajı göster
+
+            // 5 saniye sonra mesajı gizle
+            setTimeout(() => {
+                errorMessage.style.display = 'none';
+            }, 5000);
+        }
+
+        // Müşteri siparişi rastgele seçilecek
+        function getRandomPotion() {
+            const randomIndex = Math.floor(Math.random() * availablePotions.length);
+            return availablePotions[randomIndex];
+        }
+
+        // Rastgele müşteri emoji seçimi
+        function getRandomEmoji() {
+            const randomIndex = Math.floor(Math.random() * availableEmojis.length);
+            return availableEmojis[randomIndex];
+        }
+
+        // Müşteri değişimi ve rastgele sipariş
+        function showNextCustomer() {
+            const customerDiv = document.getElementById('customers');
+            customerDiv.innerHTML = ''; // Mevcut müşteri temizlendi
+
+            // Yeni müşteri ve rastgele iksir siparişi
+            const newCustomer = document.createElement('div');
+            newCustomer.classList.add('customer');
+            const randomEmoji = getRandomEmoji();  // Rastgele müşteri emoji
+            const randomPotion = getRandomPotion();  // Rastgele iksir siparişi
+
+            newCustomer.innerHTML = `
+                <div class="speech-bubble">${randomPotion} lütfen!</div>
+                <div>${randomEmoji}</div>
+            `;
+            
+            // Rastgele hikaye gösterme (her müşteri için %30 ihtimalle)
+            if (Math.random() < 0.3) {
+                const storyIndex = stories[randomPotion];
+                const randomStory = storyIndex[Math.floor(Math.random() * storyIndex.length)];
+                newCustomer.innerHTML += `<div class="speech-bubble">${randomStory}</div>`;
+            }
+
+            newCustomer.onclick = function() { sellPotion(randomPotion); };
+            customerDiv.appendChild(newCustomer);
+            playSound('customer-sound'); // Müşteriye tıklama sesi
+        }
+
+        // İksir satışı yap
+        function sellPotion(potion) {
+            if (inventory[potion] && inventory[potion] > 0) {
+                inventory[potion]--; // Envanterden iksiri çıkar
+                money += 50; // 50 TL kazandık
+                updateInventory(); // Envanteri güncelle
+                document.getElementById('money').textContent = `Para: ${money} TL`; // Parayı göster
+                
+                // Satış sonrası müşteri değişimi
+                setTimeout(showNextCustomer, 2000);
+            } else {
+                alert(`Maalesef, elimizde ${potion} yok!`);
+            }
+        }
+
+        // Tarifleri göster
+        function showRecipes() {
+            const recipeContainer = document.getElementById('recipe-container');
+            recipeContainer.style.display = recipeContainer.style.display === 'none' || recipeContainer.style.display === '' ? 'block' : 'none';
+        }
+
+        // İlk müşteri görünsün
+        window.onload = showNextCustomer;
+
+    </script>
+
+</body>
+</html>
