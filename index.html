@@ -23,7 +23,7 @@
   }
   h1, h2 {
     color: #2c3e50;
-    margin-top: 0; /* Üstteki gereksiz boşluğu kaldır */
+    margin-top: 0; 
     margin-bottom: 10px;
   }
   button {
@@ -57,31 +57,38 @@
     margin: 5px 0;
     user-select: none;
   }
+  /* DÜZELTME: XP Bar Stilleri güncellendi */
   #xp-bar-container {
     width: 100%;
     background-color: #bdc3c7;
     border-radius: 10px;
-    height: 22px; /* Yüksekliği biraz artırdık */
+    height: 22px; 
     margin-top: 5px;
-    position: relative;
-    overflow: hidden; /* Taşan kısımları gizle */
+    position: relative; /* Metni üzerine konumlandırmak için */
+    overflow: hidden; 
   }
-  #xp-bar {
+  #xp-bar { /* Bu sadece yeşil dolgu kısmı olacak */
     width: 0%;
     height: 100%;
     background-color: #2ecc71;
     border-radius: 10px;
     transition: width 0.3s;
+  }
+  #xp-bar-text { /* Metin için ayrı stil */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 12px;
     color: white;
-    /* DÜZELTME: Yazının taşmasını engellemek için */
+    font-weight: bold;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.4); 
+    pointer-events: none; 
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    padding: 0 5px; /* Yazı kenarlara yapışmasın */
   }
 
   .materials-header {
@@ -92,38 +99,38 @@
   .materials-grid {
     margin: 10px 0 20px;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); /* Min genişliği artırdık */
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); 
     gap: 15px;
     justify-items: center;
   }
   .material-item {
-    font-size: 14px; /* Yazı tipini biraz küçülttük */
+    font-size: 14px; 
     cursor: pointer;
-    padding: 8px; /* Padding ayarlandı */
+    padding: 8px; 
     background-color: #f1c40f;
     border-radius: 10px;
     transition: transform 0.2s, box-shadow 0.2s;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-around; /* İçeriği dikeyde yay */
-    width: 110px; /* Genişlik güncellendi */
-    height: 110px; /* Yükseklik güncellendi */
+    justify-content: space-around; 
+    width: 110px; 
+    height: 110px; 
     text-align: center;
     box-sizing: border-box;
     user-select: none;
     color: #333;
     border: 2px solid #e67e22;
-    overflow: hidden; /* Taşan metni gizle */
+    overflow: hidden; 
   }
-  .material-item div:first-child { /* Emoji */
+  .material-item div:first-child { 
     font-size: 32px; 
     margin-bottom: 3px;
   }
-  .material-item div:last-child { /* İsim ve Fiyat */
-    font-size: 13px; /* Yazı boyutu ayarlandı */
-    line-height: 1.2; /* Satır yüksekliği */
-    word-break: break-word; /* Gerekirse kelimeyi böl */
+  .material-item div:last-child { 
+    font-size: 13px; 
+    line-height: 1.2; 
+    word-break: break-word; 
   }
   .material-item:hover {
     transform: translateY(-5px);
@@ -211,12 +218,12 @@
   }
   
   .customer-area {
-    min-height: 220px; /* Müşteri ve balonu için yeterli alan */
+    min-height: 220px; 
     display: flex;
-    align-items: flex-end; /* Müşteriyi aşağıya yasla ki balona yer kalsın */
+    align-items: flex-end; 
     justify-content: center;
-    padding-bottom: 20px; /* Alt boşluk */
-    position: relative; /* Konuşma balonunun buna göre konumlanması için */
+    padding-bottom: 20px; 
+    position: relative; 
   }
   .customer {
     cursor: pointer;
@@ -225,16 +232,16 @@
     user-select: none;
     padding: 10px;
     transition: transform 0.2s;
-    position: relative; /* Konuşma balonunun müşteriye göre konumlanması için */
+    position: relative; 
   }
   .customer:hover {
       transform: scale(1.1);
   }
   .speech-bubble {
     position: absolute;
-    bottom: 100%; /* Müşterinin hemen üstünde */
+    bottom: 100%; 
     left: 50%;
-    transform: translateX(-50%) translateY(-10px); /* Biraz yukarı ve ortala */
+    transform: translateX(-50%) translateY(-10px); 
     background-color: #3498db;
     padding: 8px 12px;
     border-radius: 8px;
@@ -250,7 +257,7 @@
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   }
   .speech-bubble.story {
-      bottom: calc(100% + 50px); /* Hikaye balonu için daha yukarıda */
+      bottom: calc(100% + 50px); 
       background-color: #9b59b6; 
   }
 
@@ -326,7 +333,8 @@
       <div id="money">Para: 250 TL</div>
       <div id="level-info">Seviye: 1</div>
       <div id="xp-bar-container">
-        <div id="xp-bar">0/100 XP</div>
+        <div id="xp-bar"></div> 
+        <div id="xp-bar-text">0/100 XP</div>
       </div>
     </div>
     <div id="error-message">Bu tarif işe yaramaz!</div>
@@ -546,7 +554,7 @@
         document.getElementById('buy-material-info').innerHTML = `<span class="material-emoji">${material.emoji}</span> Tane Fiyatı: ${material.price} TL`;
         document.getElementById('buy-modal-money').textContent = money;
         document.getElementById('buy-material-amount').value = 1;
-        document.getElementById('buy-material-amount').max = Math.floor(money / material.price) || 1; // Maksimum alınabilecek miktar
+        document.getElementById('buy-material-amount').max = Math.floor(money / material.price) || 1;
         
         const confirmBtn = document.getElementById('confirm-buy-material-btn');
         confirmBtn.onclick = () => confirmBuyMaterial(materialName, material.price);
@@ -652,7 +660,7 @@
         checkAchievement('firstPotion');
       } else {
         showError(cauldronContents.length !== 2 && cauldronContents.length !== cauldronCapacity ? `Kazana tam olarak ${cauldronCapacity} malzeme eklemelisiniz!` : "Bu tarif işe yaramaz!");
-        cauldronContents = []; // Hatalı denemede de kazan boşalsın
+        cauldronContents = []; 
         updateCauldronContentDisplay();
       }
       saveGameData();
@@ -735,9 +743,9 @@
     }
 
     function showNextCustomer() {
-      currentCustomerPotion = getRandomPotionName(); // Önce yeni iksiri belirle
-      showCustomer(currentCustomerPotion); // Sonra müşteriyi göster
-      saveGameData(); // Müşteri değiştiğinde kaydet
+      currentCustomerPotion = getRandomPotionName(); 
+      showCustomer(currentCustomerPotion); 
+      saveGameData(); 
     }
 
     function sellPotion(potionName) {
@@ -749,10 +757,9 @@
         updatePotionInventoryDisplay();
         updateMoneyDisplay();
         
-        currentCustomerPotion = null; // Satıştan sonra mevcut müşteri talebini temizle
-        // saveGameData() burada zaten showNextCustomer içinde çağrılacak
+        currentCustomerPotion = null; 
         playSound('sound-sell-potion');
-        showNextCustomer(); // Yeni müşteri hemen gelsin
+        showNextCustomer(); 
       } else {
         alert(`Maalesef, elimizde ${potionName} yok!`);
       }
@@ -771,8 +778,8 @@
         xp += amount;
         if (xp >= xpToNextLevel) {
             level++;
-            xp -= xpToNextLevel; // Kalan XP'yi bir sonraki seviyeye aktar
-            xpToNextLevel = Math.floor(xpToNextLevel * 1.2); // Sonraki seviye için gereken XP'yi %20 artır
+            xp -= xpToNextLevel; 
+            xpToNextLevel = Math.floor(xpToNextLevel * 1.2); 
             playSound('sound-level-up');
             alert(`Tebrikler! Seviye ${level} oldunuz!`);
             renderUpgrades(); 
@@ -782,10 +789,14 @@
 
     function updateXPBar() {
         document.getElementById('level-info').textContent = `Seviye: ${level}`;
-        const progress = Math.min((xp / xpToNextLevel) * 100, 100); // %100'ü geçmesin
+        const progress = Math.min((xp / xpToNextLevel) * 100, 100); 
         const xpBarElement = document.getElementById('xp-bar');
+        const xpBarTextElement = document.getElementById('xp-bar-text'); // Referansı al
+
         xpBarElement.style.width = `${progress}%`;
-        xpBarElement.textContent = `${Math.floor(xp)}/${xpToNextLevel} XP`;
+        if (xpBarTextElement) { // Elementin varlığını kontrol et
+             xpBarTextElement.textContent = `${Math.floor(xp)}/${xpToNextLevel} XP`;
+        }
     }
 
     function renderUpgrades() {
@@ -811,10 +822,10 @@
         if (!upgrade.purchased && money >= upgrade.cost) {
             money -= upgrade.cost;
             upgrade.purchased = true;
-            if(typeof upgrade.effect === 'function') upgrade.effect(); // Efekti uygula
+            if(typeof upgrade.effect === 'function') upgrade.effect(); 
             playSound('sound-upgrade');
             updateMoneyDisplay();
-            renderUpgrades(); // Buton durumunu güncellemek için
+            renderUpgrades(); 
             saveGameData();
         } else if (upgrade.purchased) {
             alert("Bu geliştirmeyi zaten satın aldınız!");
@@ -858,7 +869,7 @@
                 }
                 playSound('sound-achievement');
                 alert(`Başarım Kazanıldı: ${ach.name}!`);
-                renderAchievements(); // Başarım listesini güncelle
+                renderAchievements(); 
                 saveGameData();
             }
         }
@@ -894,7 +905,7 @@
       xpToNextLevel = savedXPToNext ? parseInt(savedXPToNext) : 100;
       potionInventory = savedPotionInv ? JSON.parse(savedPotionInv) : {};
       materialInventory = savedMatInv ? JSON.parse(savedMatInv) : {};
-      currentCustomerPotion = savedCustomer === "null" ? null : savedCustomer; // "null" string kontrolü
+      currentCustomerPotion = savedCustomer === "null" ? null : savedCustomer; 
       
       if (savedUpgrades) {
           const loadedUpgrades = JSON.parse(savedUpgrades);
