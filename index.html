@@ -8,283 +8,439 @@
   body {
     font-family: Arial, sans-serif;
     text-align: center;
-    background-color: #f4f4f4;
+    background-color: #f0f0f0;
     margin: 0;
     padding: 20px;
+    color: #333;
   }
   .game-container {
     max-width: 1200px;
     margin: 0 auto;
     background: #fff;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     padding: 20px;
   }
-  h1 {
+  h1, h2 {
     color: #2c3e50;
+    margin-top: 0; /* Üstteki gereksiz boşluğu kaldır */
     margin-bottom: 10px;
   }
-  .materials {
-    margin: 20px 0;
+  button {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 5px;
+    transition: background-color 0.2s;
+  }
+  button:hover {
+    background-color: #2980b9;
+  }
+  button:disabled {
+    background-color: #bdc3c7;
+    cursor: not-allowed;
+  }
+  .info-bar {
+    background-color: #ecf0f1;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+  }
+  #money, #level-info {
+    font-size: 20px;
+    color: #2c3e50;
+    margin: 5px 0;
+    user-select: none;
+  }
+  #xp-bar-container {
+    width: 100%;
+    background-color: #bdc3c7;
+    border-radius: 10px;
+    height: 22px; /* Yüksekliği biraz artırdık */
+    margin-top: 5px;
+    position: relative;
+    overflow: hidden; /* Taşan kısımları gizle */
+  }
+  #xp-bar {
+    width: 0%;
+    height: 100%;
+    background-color: #2ecc71;
+    border-radius: 10px;
+    transition: width 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: white;
+    /* DÜZELTME: Yazının taşmasını engellemek için */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 5px; /* Yazı kenarlara yapışmasın */
+  }
+
+  .materials-header {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #7f8c8d;
+  }
+  .materials-grid {
+    margin: 10px 0 20px;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); /* Min genişliği artırdık */
+    gap: 15px;
     justify-items: center;
   }
-  .material {
-    font-size: 16px;
+  .material-item {
+    font-size: 14px; /* Yazı tipini biraz küçülttük */
     cursor: pointer;
-    padding: 10px;
-    background-color: #f39c12;
+    padding: 8px; /* Padding ayarlandı */
+    background-color: #f1c40f;
     border-radius: 10px;
-    transition: transform 0.3s;
+    transition: transform 0.2s, box-shadow 0.2s;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    width: 100px;
-    height: 100px;
+    justify-content: space-around; /* İçeriği dikeyde yay */
+    width: 110px; /* Genişlik güncellendi */
+    height: 110px; /* Yükseklik güncellendi */
     text-align: center;
     box-sizing: border-box;
     user-select: none;
+    color: #333;
+    border: 2px solid #e67e22;
+    overflow: hidden; /* Taşan metni gizle */
   }
-  .material div:first-child {
-    font-size: 40px;
-    margin-bottom: 6px;
+  .material-item div:first-child { /* Emoji */
+    font-size: 32px; 
+    margin-bottom: 3px;
   }
-  .material:hover {
-    transform: scale(1.1);
+  .material-item div:last-child { /* İsim ve Fiyat */
+    font-size: 13px; /* Yazı boyutu ayarlandı */
+    line-height: 1.2; /* Satır yüksekliği */
+    word-break: break-word; /* Gerekirse kelimeyi böl */
+  }
+  .material-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+  }
+
+  .cauldron-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
   }
   .cauldron {
-    margin: 20px auto 10px;
-    background-color: #2c3e50;
+    background-color: #34495e;
     border-radius: 50%;
-    width: 200px;
-    height: 200px;
-    border: 5px solid #f39c12;
+    width: 180px;
+    height: 180px;
+    border: 6px solid #f39c12;
     color: white;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3) inset;
   }
   .cauldron h2 {
-    margin: 0 0 10px;
+    margin: 0 0 8px;
+    font-size: 20px;
   }
   .cauldron-content {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    max-width: 150px;
+    max-width: 140px;
   }
   .cauldron-content div {
-    font-size: 40px;
-    margin: 3px;
+    font-size: 36px;
+    margin: 2px;
     user-select: none;
   }
   #boil-btn {
     background-color: #e74c3c;
-    color: white;
-    padding: 10px 25px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    margin: 10px auto 20px;
-    display: block;
+    margin-top: 15px;
   }
   #boil-btn:hover {
     background-color: #c0392b;
   }
-  .inventory {
-    background-color: #2ecc71;
-    padding: 15px 20px;
-    border-radius: 10px;
+
+  .inventory-section, .material-inventory-section {
+    background-color: #ecf0f1;
+    padding: 15px;
+    border-radius: 8px;
     margin-bottom: 20px;
-    min-height: 50px;
+    min-height: 60px;
   }
-  .inventory h2 {
+  .inventory-section h2, .material-inventory-section h2 {
     margin: 0 0 10px;
-    color: #1a472a;
+    color: #2c3e50;
   }
-  .inventory div {
-    background-color: #27ae60;
+  .inventory-item, .material-inv-item {
+    background-color: #2ecc71;
     padding: 6px 12px;
     border-radius: 5px;
     color: white;
-    margin: 3px 8px;
+    margin: 4px;
     display: inline-block;
     user-select: none;
+    font-size: 14px;
   }
+  .material-inv-item {
+    background-color: #f39c12;
+    color: #333;
+  }
+
   #error-message {
     background-color: #e74c3c;
     color: white;
     padding: 10px;
-    font-size: 18px;
-    margin: 0 auto 10px;
+    font-size: 16px;
+    margin: 0 auto 15px;
     max-width: 400px;
     border-radius: 6px;
     display: none;
     user-select: none;
   }
-  #money {
-    font-size: 20px;
-    color: #2c3e50;
-    margin-bottom: 10px;
-    user-select: none;
+  
+  .customer-area {
+    min-height: 220px; /* Müşteri ve balonu için yeterli alan */
+    display: flex;
+    align-items: flex-end; /* Müşteriyi aşağıya yasla ki balona yer kalsın */
+    justify-content: center;
+    padding-bottom: 20px; /* Alt boşluk */
+    position: relative; /* Konuşma balonunun buna göre konumlanması için */
   }
   .customer {
-    margin-top: 120px;
     cursor: pointer;
     display: inline-block;
-    position: relative;
-    font-size: 80px;
+    font-size: 70px;
     user-select: none;
+    padding: 10px;
+    transition: transform 0.2s;
+    position: relative; /* Konuşma balonunun müşteriye göre konumlanması için */
+  }
+  .customer:hover {
+      transform: scale(1.1);
   }
   .speech-bubble {
     position: absolute;
-    top: -120px;
+    bottom: 100%; /* Müşterinin hemen üstünde */
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) translateY(-10px); /* Biraz yukarı ve ortala */
     background-color: #3498db;
     padding: 8px 12px;
     border-radius: 8px;
     color: white;
     font-size: 14px;
+    min-width: 150px; 
     max-width: 220px;
     white-space: normal;
     word-wrap: break-word;
     line-height: 1.3;
     box-sizing: border-box;
     z-index: 10;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   }
-  #recipe-button {
-    background-color: #2980b9;
-    color: white;
-    padding: 10px 25px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-bottom: 10px;
+  .speech-bubble.story {
+      bottom: calc(100% + 50px); /* Hikaye balonu için daha yukarıda */
+      background-color: #9b59b6; 
   }
-  #recipe-button:hover {
-    background-color: #3498db;
-  }
-  .recipe-container {
+
+  .modal {
     display: none;
-    background-color: #fff;
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
     border-radius: 10px;
-    padding: 15px 20px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    max-width: 600px;
-    margin: 0 auto 20px;
-    user-select: none;
     text-align: left;
-    overflow-wrap: break-word;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
   }
-  .recipe-item {
-    font-size: 18px;
-    margin: 6px 0;
-  }
-  .recipe-item span {
+  .modal-content h2 { text-align: center; }
+  .close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
     font-weight: bold;
-    margin-right: 6px;
+    cursor: pointer;
   }
+  .recipe-item, .upgrade-item, .achievement-item {
+    font-size: 16px;
+    margin: 8px 0;
+    padding: 8px;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    border-left: 4px solid #3498db;
+  }
+  .upgrade-item button { margin-left: 10px; padding: 5px 10px; font-size: 14px;}
+  .achievement-item.completed {
+    border-left-color: #2ecc71;
+    text-decoration: line-through;
+    color: #7f8c8d;
+  }
+  .achievement-reward { font-style: italic; font-size: 0.9em; color: #27ae60;}
+
+  .tabs { margin-bottom: 15px; display: flex; justify-content: center; }
+  .tab-button { background-color: #7f8c8d; margin: 0 5px; }
+  .tab-button.active { background-color: #2980b9; }
+
+  #buy-material-modal .material-buy-option {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+  }
+   #buy-material-modal .material-buy-option:last-child { border-bottom: none;}
+   #buy-material-modal .material-emoji { font-size: 24px; margin-right: 10px;}
+   #buy-material-modal input[type="number"] { width: 60px; padding: 5px; margin-left: 10px; margin-right: 10px;}
 </style>
 </head>
 <body>
   <div class="game-container">
     <h1>Simya Dükkanı</h1>
 
+    <div class="info-bar">
+      <div id="money">Para: 250 TL</div>
+      <div id="level-info">Seviye: 1</div>
+      <div id="xp-bar-container">
+        <div id="xp-bar">0/100 XP</div>
+      </div>
+    </div>
     <div id="error-message">Bu tarif işe yaramaz!</div>
-    <div id="money">Para: 0 TL</div>
-<!-- İksir Tarifleri Butonu -->
-<button id="recipe-button" onclick="showRecipes()">İksir Tarifleri</button>
-
-<!-- Tarifler Kutusu -->
-<div id="recipe-container" class="recipe-container" style="display:none;">
-  <div class="recipe-item"><span>Sağlık İksiri:</span> 🐞 + 🌸</div>
-  <div class="recipe-item"><span>Hız İksiri:</span> 🐜 + 🌸</div>
-  <div class="recipe-item"><span>Güç İksiri:</span> 🐞 + 🐜</div>
-  <div class="recipe-item"><span>Büyü İksiri:</span> 🔮 + 🌸</div>
-  <div class="recipe-item"><span>Ateş İksiri:</span> 🔥 + 🐞</div>
-  <div class="recipe-item"><span>Su İksiri:</span> 💧 + 🐜</div>
-  <div class="recipe-item"><span>Yılan İksiri:</span> 🐍 + ✨</div>
-  <div class="recipe-item"><span>Ay Işığı İksiri:</span> 🌙 + 🔮</div>
-  <div class="recipe-item"><span>Zehir İksiri:</span> 🍄 + 🔮</div>
-  <div class="recipe-item"><span>Buz İksiri:</span> 🍄 + 💧</div>
-  <div class="recipe-item"><span>Zenginlik İksiri:</span> ✨ + 🍄</div>
-  <div class="recipe-item"><span>Zihin Gücü İksiri:</span> 🌙 + ✨</div>
-  <div class="recipe-item"><span>Enerji İksiri:</span> 🔥 + 🍄</div>
-</div>
-    <div class="materials">
-      <div class="material" onclick="addToCauldron('Uğur Böceği')">
-        <div>🐞</div><div>Uğur Böceği</div>
-      </div>
-      <div class="material" onclick="addToCauldron('Çiçek')">
-        <div>🌸</div><div>Çiçek</div>
-      </div>
-      <div class="material" onclick="addToCauldron('Karınca')">
-        <div>🐜</div><div>Karınca</div>
-      </div>
-      <div class="material" onclick="addToCauldron('Büyülü Taş')">
-        <div>🔮</div><div>Büyülü Taş</div>
-      </div>
-      <div class="material" onclick="addToCauldron('Su Damlası')">
-        <div>💧</div><div>Su Damlası</div>
-      </div>
-      <div class="material" onclick="addToCauldron('Ateş')">
-        <div>🔥</div><div>Ateş</div>
-      </div>
-      <div class="material" onclick="addToCauldron('Yılan')">
-        <div>🐍</div><div>Yılan</div>
-      </div>
-      <div class="material" onclick="addToCauldron('Büyülü Toz')">
-        <div>✨</div><div>Büyülü Toz</div>
-      </div>
-      <div class="material" onclick="addToCauldron('Ay Işığı')">
-        <div>🌙</div><div>Ay Işığı</div>
-      </div>
-      <div class="material" onclick="addToCauldron('Zehirli Mantar')">
-        <div>🍄</div><div>Zehirli Mantar</div>
-      </div>
+    
+    <div class="tabs">
+        <button id="recipe-button" class="tab-button" onclick="showModal('recipe-modal')">İksir Tarifleri</button>
+        <button id="upgrades-button" class="tab-button" onclick="showModal('upgrades-modal')">Dükkan Geliştirmeleri</button>
+        <button id="achievements-button" class="tab-button" onclick="showModal('achievements-modal')">Başarımlar</button>
     </div>
 
-    <div class="cauldron">
-      <h2>Kazan</h2>
-      <div id="cauldron-content" class="cauldron-content">Henüz malzeme eklemediniz.</div>
+    <div class="material-inventory-section">
+        <h2>Malzemelerim</h2>
+        <div id="material-inventory-content">Malzeme yok.</div>
     </div>
 
-    <button id="boil-btn" onclick="boilIngredients()">Kaynat</button>
-
-    <div class="inventory">
-      <h2>Envanter</h2>
-      <div id="inventory-content"></div>
+    <div class="materials-header">Satın Alınabilir Malzemeler</div>
+    <div class="materials-grid">
+      <div class="material-item" data-name="Uğur Böceği" data-price="15"><div>🐞</div><div>Uğur Böceği (15TL)</div></div>
+      <div class="material-item" data-name="Çiçek" data-price="10"><div>🌸</div><div>Çiçek (10TL)</div></div>
+      <div class="material-item" data-name="Karınca" data-price="20"><div>🐜</div><div>Karınca (20TL)</div></div>
+      <div class="material-item" data-name="Büyülü Taş" data-price="50"><div>🔮</div><div>Büyülü Taş (50TL)</div></div>
+      <div class="material-item" data-name="Su Damlası" data-price="5"><div>💧</div><div>Su Damlası (5TL)</div></div>
+      <div class="material-item" data-name="Ateş" data-price="25"><div>🔥</div><div>Ateş (25TL)</div></div>
+      <div class="material-item" data-name="Yılan" data-price="40"><div>🐍</div><div>Yılan (40TL)</div></div>
+      <div class="material-item" data-name="Büyülü Toz" data-price="60"><div>✨</div><div>Büyülü Toz (60TL)</div></div>
+      <div class="material-item" data-name="Ay Işığı" data-price="45"><div>🌙</div><div>Ay Işığı (45TL)</div></div>
+      <div class="material-item" data-name="Zehirli Mantar" data-price="30"><div>🍄</div><div>Zehirli Mantar (30TL)</div></div>
     </div>
+
+    <div class="cauldron-section">
+      <div class="cauldron">
+        <h2>Kazan</h2>
+        <div id="cauldron-content">Malzeme seç...</div>
+      </div>
+      <button id="boil-btn" onclick="boilIngredients()">Kaynat</button>
+    </div>
+
+    <div class="inventory-section">
+      <h2>İksir Envanteri</h2>
+      <div id="inventory-content">İksir yok.</div>
+    </div>
+    
+    <div class="customer-area">
         <div id="customers"></div>
+    </div>
   </div>
 
-  <audio id="material-sound" src="sounds/material-click.mp3"></audio>
-  <audio id="boil-sound" src="sounds/boil-click.mp3"></audio>
-  <audio id="customer-sound" src="sounds/customer-click.mp3"></audio>
+  <div id="recipe-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('recipe-modal')">&times;</span>
+      <h2>İksir Tarifleri</h2>
+      <div id="recipe-list">
+        <div class="recipe-item"><span>Sağlık İksiri:</span> 🐞 + 🌸</div>
+        <div class="recipe-item"><span>Hız İksiri:</span> 🐜 + 🌸</div>
+        <div class="recipe-item"><span>Güç İksiri:</span> 🐞 + 🐜</div>
+        <div class="recipe-item"><span>Büyü İksiri:</span> 🔮 + 🌸</div>
+        <div class="recipe-item"><span>Ateş İksiri:</span> 🔥 + 🐞</div>
+        <div class="recipe-item"><span>Su İksiri:</span> 💧 + 🐜</div>
+        <div class="recipe-item"><span>Yılan İksiri:</span> 🐍 + ✨</div>
+        <div class="recipe-item"><span>Ay Işığı İksiri:</span> 🌙 + 🔮</div>
+        <div class="recipe-item"><span>Zehir İksiri:</span> 🍄 + 🔮</div>
+        <div class="recipe-item"><span>Buz İksiri:</span> 🍄 + 💧</div>
+        <div class="recipe-item"><span>Zenginlik İksiri:</span> ✨ + 🍄</div>
+        <div class="recipe-item"><span>Zihin Gücü İksiri:</span> 🌙 + ✨</div>
+        <div class="recipe-item"><span>Enerji İksiri:</span> 🔥 + 🍄</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="upgrades-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('upgrades-modal')">&times;</span>
+      <h2>Dükkan Geliştirmeleri</h2>
+      <div id="upgrades-list"></div>
+    </div>
+  </div>
+
+  <div id="achievements-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('achievements-modal')">&times;</span>
+      <h2>Başarımlar</h2>
+      <div id="achievements-list"></div>
+    </div>
+  </div>
+  
+  <div id="buy-material-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('buy-material-modal')">&times;</span>
+      <h2 id="buy-material-name">Malzeme Satın Al</h2>
+      <div class="material-buy-option">
+          <span id="buy-material-info"></span>
+          <input type="number" id="buy-material-amount" value="1" min="1">
+          <button id="confirm-buy-material-btn">Satın Al</button>
+      </div>
+      <p>Mevcut Bakiye: <span id="buy-modal-money"></span> TL</p>
+    </div>
+  </div>
+
+  <audio id="sound-add-material" src="sounds/add_material.wav"></audio>
+  <audio id="sound-boil" src="sounds/boil_potion.wav"></audio>
+  <audio id="sound-customer-appears" src="sounds/customer_bell.wav"></audio>
+  <audio id="sound-sell-potion" src="sounds/sell_potion.wav"></audio>
+  <audio id="sound-error" src="sounds/error_buzz.wav"></audio>
+  <audio id="sound-level-up" src="sounds/level_up.wav"></audio>
+  <audio id="sound-achievement" src="sounds/achievement_unlocked.wav"></audio>
+  <audio id="sound-upgrade" src="sounds/upgrade_shop.wav"></audio>
+  <audio id="sound-buy-material" src="sounds/buy_item.wav"></audio>
 
   <script>
     const availableEmojis = ['👩🏻', '👨🏽', '👩🏿‍🦱', '👨🏼', '👵🏻', '👴🏽', '🧑🏻', '🧑🏼', '🧑🏽', '👩🏽', '👨🏻'];
     const availablePotions = [
-      'Sağlık İksiri',
-      'Hız İksiri',
-      'Güç İksiri',
-      'Büyü İksiri',
-      'Ateş İksiri',
-      'Su İksiri',
-      'Yılan İksiri',
-      'Ay Işığı İksiri',
-      'Zehir İksiri',
-      'Buz İksiri',
-      'Zenginlik İksiri',
-      'Zihin Gücü İksiri',
-      'Enerji İksiri'
+      'Sağlık İksiri', 'Hız İksiri', 'Güç İksiri', 'Büyü İksiri', 'Ateş İksiri', 'Su İksiri',
+      'Yılan İksiri', 'Ay Işığı İksiri', 'Zehir İksiri', 'Buz İksiri', 'Zenginlik İksiri',
+      'Zihin Gücü İksiri', 'Enerji İksiri'
     ];
 
     const stories = {
@@ -308,7 +464,7 @@
         "Bazen ateş, ruhumu ısıtacak tek şey oluyor. Biraz da cesaret isterim, bu iksir bana yardımcı olabilir.",
         "Bunu almak zorundayım! Ateşin gücünü hissetmek ve çevremdeki dünyayı aydınlatmak istiyorum."
       ],
-      'Zihin Gücü İksiri': [
+       'Zihin Gücü İksiri': [
         "Zihinsel engellerim var, bu iksirle düşünme kapasitemi artırıp sorunları çözmeyi umuyorum.",
         "Bazen zihnim çok dağılmış hissediyorum, bu iksir bana netlik ve odaklanma sağlayacak."
       ],
@@ -322,113 +478,220 @@
       ]
     };
 
+    const materialData = {
+        'Uğur Böceği': { emoji: '🐞', price: 15 }, 'Çiçek': { emoji: '🌸', price: 10 },
+        'Karınca': { emoji: '🐜', price: 20 }, 'Büyülü Taş': { emoji: '🔮', price: 50 },
+        'Su Damlası': { emoji: '💧', price: 5 }, 'Ateş': { emoji: '🔥', price: 25 },
+        'Yılan': { emoji: '🐍', price: 40 }, 'Büyülü Toz': { emoji: '✨', price: 60 },
+        'Ay Işığı': { emoji: '🌙', price: 45 }, 'Zehirli Mantar': { emoji: '🍄', price: 30 }
+    };
+
+    const recipes = {
+        'Çiçek,Uğur Böceği': { name: 'Sağlık İksiri', xp: 10, price: 50 },
+        'Çiçek,Karınca': { name: 'Hız İksiri', xp: 12, price: 60 },
+        'Karınca,Uğur Böceği': { name: 'Güç İksiri', xp: 15, price: 70 },
+        'Büyülü Taş,Çiçek': { name: 'Büyü İksiri', xp: 20, price: 100 },
+        'Ateş,Uğur Böceği': { name: 'Ateş İksiri', xp: 18, price: 90 },
+        'Karınca,Su Damlası': { name: 'Su İksiri', xp: 8, price: 40 },
+        'Büyülü Toz,Yılan': { name: 'Yılan İksiri', xp: 25, price: 120 },
+        'Ay Işığı,Büyülü Taş': { name: 'Ay Işığı İksiri', xp: 22, price: 110 },
+        'Büyülü Taş,Zehirli Mantar': { name: 'Zehir İksiri', xp: 18, price: 85 },
+        'Su Damlası,Zehirli Mantar': { name: 'Buz İksiri', xp: 16, price: 75 },
+        'Büyülü Toz,Zehirli Mantar': { name: 'Zenginlik İksiri', xp: 30, price: 150 },
+        'Ay Işığı,Büyülü Toz': { name: 'Zihin Gücü İksiri', xp: 28, price: 140 },
+        'Ateş,Zehirli Mantar': { name: 'Enerji İksiri', xp: 20, price: 95 }
+    };
+    
+    const upgrades = {
+        biggerCauldron: { name: "Geniş Kazan", description: "Aynı anda 3 malzeme ile iksir yap (yeni tarifler gerektirir).", cost: 500, purchased: false, effect: () => cauldronCapacity = 3 },
+        bargainSkills: { name: "Pazarlık Becerisi", description: "İksir satış fiyatlarını %20 artır.", cost: 1000, purchased: false, effect: () => potionSaleMultiplier = 1.2 },
+        alchemyKnowledge: { name: "Simya Bilgisi", description: "İksir yapımından %50 daha fazla XP kazan.", cost: 750, purchased: false, effect: () => xpGainMultiplier = 1.5 }
+    };
+
+    const achievements = {
+        firstPotion: { name: "Acemi Simyacı", description: "İlk iksirini yap.", completed: false, reward: { money: 50, xp: 20 } },
+        tenRecipes: { name: "Kalfa Simyacı", description: "5 farklı tarifle iksir yap.", completed: false, reward: { money: 100, xp: 50 } },
+        allRecipes: { name: "Usta Simyacı", description: "Tüm tarifleri keşfet.", completed: false, reward: { money: 500, xp: 200 } },
+        richAlchemist: { name: "Girişimci Ruh", description: "Toplam 1000 TL kazan.", completed: false, reward: { money: 0, xp: 100 } },
+        potionMaster: { name: "İksir Uzmanı", description: "Toplam 50 iksir yap.", completed: false, reward: { money: 200, xp: 100 } }
+    };
+
     let cauldronContents = [];
-    let inventory = {};
-    let money = 0;
+    let potionInventory = {};
+    let materialInventory = {};
+    let money = 250;
     let currentCustomerPotion = null;
+    let level = 1;
+    let xp = 0;
+    let xpToNextLevel = 100;
+    let cauldronCapacity = 2;
+    let potionSaleMultiplier = 1.0;
+    let xpGainMultiplier = 1.0;
+    let madeRecipeCount = 0;
+    let totalPotionsMade = 0;
+    let discoveredRecipes = new Set();
+
 
     function playSound(soundId) {
       const sound = document.getElementById(soundId);
-      if(sound){
+      if(sound && sound.readyState >= 2){ 
         sound.currentTime = 0;
-        sound.play();
+        sound.play().catch(e => console.warn("Ses çalma hatası:", e));
       }
     }
 
-    function addToCauldron(item) {
-      cauldronContents.push(item);
-      updateCauldronContent();
-      playSound('material-sound');
+    function openBuyMaterialModal(materialName) {
+        const material = materialData[materialName];
+        document.getElementById('buy-material-name').textContent = `${materialName} Satın Al`;
+        document.getElementById('buy-material-info').innerHTML = `<span class="material-emoji">${material.emoji}</span> Tane Fiyatı: ${material.price} TL`;
+        document.getElementById('buy-modal-money').textContent = money;
+        document.getElementById('buy-material-amount').value = 1;
+        document.getElementById('buy-material-amount').max = Math.floor(money / material.price) || 1; // Maksimum alınabilecek miktar
+        
+        const confirmBtn = document.getElementById('confirm-buy-material-btn');
+        confirmBtn.onclick = () => confirmBuyMaterial(materialName, material.price);
+        
+        showModal('buy-material-modal');
     }
 
-    function updateCauldronContent() {
+    function confirmBuyMaterial(materialName, pricePerUnit) {
+        const amountInput = document.getElementById('buy-material-amount');
+        const amount = parseInt(amountInput.value);
+        
+        if (isNaN(amount) || amount <= 0) {
+            alert("Lütfen geçerli bir miktar girin.");
+            return;
+        }
+        const totalCost = amount * pricePerUnit;
+
+        if (money >= totalCost) {
+            money -= totalCost;
+            materialInventory[materialName] = (materialInventory[materialName] || 0) + amount;
+            updateMoneyDisplay();
+            updateMaterialInventoryDisplay();
+            playSound('sound-buy-material');
+            closeModal('buy-material-modal');
+            saveGameData();
+        } else {
+            alert("Yeterli paranız yok!");
+        }
+    }
+    
+    function addToCauldron(materialName) {
+      if (!materialInventory[materialName] || materialInventory[materialName] <= 0) {
+        alert(`${materialName} envanterinizde yok! Önce satın almalısınız.`);
+        return;
+      }
+      if (cauldronContents.length >= cauldronCapacity) {
+          alert(`Kazan dolu! En fazla ${cauldronCapacity} malzeme ekleyebilirsiniz.`);
+          return;
+      }
+      
+      cauldronContents.push(materialName);
+      materialInventory[materialName]--;
+      updateCauldronContentDisplay();
+      updateMaterialInventoryDisplay();
+      playSound('sound-add-material');
+      saveGameData();
+    }
+
+    function updateCauldronContentDisplay() {
       const div = document.getElementById('cauldron-content');
       div.innerHTML = '';
       if (cauldronContents.length === 0) {
-        div.textContent = 'Henüz malzeme eklemediniz.';
+        div.textContent = 'Malzeme seç...';
         return;
       }
       cauldronContents.forEach(item => {
         const emojiDiv = document.createElement('div');
-        emojiDiv.textContent = getEmojiForMaterial(item);
+        emojiDiv.textContent = materialData[item].emoji;
         div.appendChild(emojiDiv);
       });
     }
-
-    function getEmojiForMaterial(item) {
-      switch(item) {
-        case 'Uğur Böceği': return '🐞';
-        case 'Çiçek': return '🌸';
-        case 'Karınca': return '🐜';
-        case 'Büyülü Taş': return '🔮';
-        case 'Su Damlası': return '💧';
-        case 'Ateş': return '🔥';
-        case 'Yılan': return '🐍';
-        case 'Büyülü Toz': return '✨';
-        case 'Ay Işığı': return '🌙';
-        case 'Zehirli Mantar': return '🍄';
-        default: return '';
-      }
+    
+    function updateMaterialInventoryDisplay() {
+        const container = document.getElementById('material-inventory-content');
+        container.innerHTML = '';
+        let hasMaterials = false;
+        Object.entries(materialInventory).forEach(([material, count]) => {
+            if (count > 0) {
+                hasMaterials = true;
+                const div = document.createElement('div');
+                div.className = 'material-inv-item';
+                div.textContent = `${materialData[material].emoji} ${material}: ${count}`;
+                div.onclick = () => addToCauldron(material); 
+                container.appendChild(div);
+            }
+        });
+        if (!hasMaterials) {
+            container.textContent = 'Malzeme yok. Yukarıdan satın al.';
+        }
     }
 
     function boilIngredients() {
-      const potion = createPotion(cauldronContents);
-      if (potion) {
-        inventory[potion] = (inventory[potion] || 0) + 1;
+      const potionData = createPotion(cauldronContents);
+      if (potionData) {
+        potionInventory[potionData.name] = (potionInventory[potionData.name] || 0) + 1;
+        addXP(Math.floor(potionData.xp * xpGainMultiplier));
+        
+        totalPotionsMade++;
+        checkAchievement('potionMaster', totalPotionsMade);
+        
+        if (!discoveredRecipes.has(potionData.name)) {
+            discoveredRecipes.add(potionData.name);
+            checkAchievement('tenRecipes', discoveredRecipes.size);
+            if (discoveredRecipes.size === Object.keys(recipes).length) {
+                 checkAchievement('allRecipes', discoveredRecipes.size);   
+            }
+        }
+        
         cauldronContents = [];
-        updateCauldronContent();
-        updateInventory();
-        playSound('boil-sound');
+        updateCauldronContentDisplay();
+        updatePotionInventoryDisplay();
+        playSound('sound-boil');
+        checkAchievement('firstPotion');
       } else {
-        showError();
-        cauldronContents = [];
-        updateCauldronContent();
+        showError(cauldronContents.length !== 2 && cauldronContents.length !== cauldronCapacity ? `Kazana tam olarak ${cauldronCapacity} malzeme eklemelisiniz!` : "Bu tarif işe yaramaz!");
+        cauldronContents = []; // Hatalı denemede de kazan boşalsın
+        updateCauldronContentDisplay();
       }
+      saveGameData();
     }
 
     function createPotion(ingredients) {
-      const sorted = [...ingredients].sort();
-      if (sorted.length !== 2) return null;
-
-      const combos = {
-        'Çiçek,Uğur Böceği': 'Sağlık İksiri',
-        'Çiçek,Karınca': 'Hız İksiri',
-        'Karınca,Uğur Böceği': 'Güç İksiri',
-        'Büyülü Taş,Çiçek': 'Büyü İksiri',
-        'Ateş,Uğur Böceği': 'Ateş İksiri',
-        'Karınca,Su Damlası': 'Su İksiri',
-        'Büyülü Toz,Yılan': 'Yılan İksiri',
-        'Ay Işığı,Büyülü Taş': 'Ay Işığı İksiri',
-        'Büyülü Taş,Zehirli Mantar': 'Zehir İksiri',
-        'Su Damlası,Zehirli Mantar': 'Buz İksiri',
-        'Büyülü Toz,Zehirli Mantar': 'Zenginlik İksiri',
-        'Ay Işığı,Büyülü Toz': 'Zihin Gücü İksiri',
-        'Ateş,Zehirli Mantar': 'Enerji İksiri'
-      };
-
-      const key = sorted.join(',');
-      return combos[key] || null;
+      if (ingredients.length !== 2 && (cauldronCapacity === 2 || ingredients.length !== cauldronCapacity) ) return null; 
+      
+      const sortedKey = [...ingredients].sort().join(',');
+      return recipes[sortedKey] || null;
     }
 
-    function updateInventory() {
+    function updatePotionInventoryDisplay() {
       const container = document.getElementById('inventory-content');
       container.innerHTML = '';
-      Object.entries(inventory).forEach(([potion, count]) => {
+      let hasPotions = false;
+      Object.entries(potionInventory).forEach(([potion, count]) => {
         if (count > 0) {
+          hasPotions = true;
           const div = document.createElement('div');
+          div.className = 'inventory-item';
           div.textContent = `${potion}: ${count}`;
           container.appendChild(div);
         }
       });
+      if (!hasPotions) {
+          container.textContent = 'İksir yok.';
+      }
     }
 
-    function showError() {
-      const error = document.getElementById('error-message');
-      error.style.display = 'block';
-      setTimeout(() => { error.style.display = 'none'; }, 5000);
+    function showError(message = "Bu tarif işe yaramaz!") {
+      const errorDiv = document.getElementById('error-message');
+      errorDiv.textContent = message;
+      errorDiv.style.display = 'block';
+      playSound('sound-error');
+      setTimeout(() => { errorDiv.style.display = 'none'; }, 3000);
     }
 
-    function getRandomPotion() {
+    function getRandomPotionName() {
       const i = Math.floor(Math.random() * availablePotions.length);
       return availablePotions[i];
     }
@@ -438,64 +701,228 @@
       return availableEmojis[i];
     }
 
-    function showCustomer(potion) {
+    function showCustomer(potionName) {
       const customerDiv = document.getElementById('customers');
       customerDiv.innerHTML = '';
 
       const cust = document.createElement('div');
       cust.classList.add('customer');
       const emoji = getRandomEmoji();
+      
+      const requestBubble = document.createElement('div');
+      requestBubble.className = 'speech-bubble';
+      requestBubble.textContent = `${potionName} lütfen!`;
+      cust.appendChild(requestBubble);
 
-      cust.innerHTML = `
-        <div class="speech-bubble">${potion} lütfen!</div>
-        <div>${emoji}</div>
-      `;
+      const emojiContainer = document.createElement('div');
+      emojiContainer.textContent = emoji;
+      cust.appendChild(emojiContainer);
 
-      if (Math.random() < 0.3 && stories[potion]) {
-        const story = stories[potion][Math.floor(Math.random() * stories[potion].length)];
-        cust.innerHTML += `<div class="speech-bubble" style="top:-140px;">${story}</div>`;
+
+      if (Math.random() < 0.3 && stories[potionName]) {
+        const story = stories[potionName][Math.floor(Math.random() * stories[potionName].length)];
+        const storyBubble = document.createElement('div');
+        storyBubble.className = 'speech-bubble story';
+        storyBubble.textContent = story;
+        cust.appendChild(storyBubble);
       }
 
-      cust.onclick = () => sellPotion(potion);
+      cust.onclick = () => sellPotion(potionName);
       customerDiv.appendChild(cust);
 
-      currentCustomerPotion = potion;
-      saveGameData();
-      playSound('customer-sound');
+      currentCustomerPotion = potionName;
+      playSound('sound-customer-appears');
     }
 
     function showNextCustomer() {
-      showCustomer(getRandomPotion());
+      currentCustomerPotion = getRandomPotionName(); // Önce yeni iksiri belirle
+      showCustomer(currentCustomerPotion); // Sonra müşteriyi göster
+      saveGameData(); // Müşteri değiştiğinde kaydet
     }
 
-    function sellPotion(potion) {
-      if (inventory[potion] && inventory[potion] > 0) {
-        inventory[potion]--;
-        money += 50;
-        updateInventory();
-        document.getElementById('money').textContent = `Para: ${money} TL`;
-        saveGameData();
-
-        currentCustomerPotion = null;
-        saveGameData();
-
-        showNextCustomer();
+    function sellPotion(potionName) {
+      if (potionInventory[potionName] && potionInventory[potionName] > 0) {
+        potionInventory[potionName]--;
+        const salePrice = Math.floor((Object.values(recipes).find(r => r.name === potionName)?.price || 50) * potionSaleMultiplier);
+        money += salePrice;
+        addXP(10); 
+        updatePotionInventoryDisplay();
+        updateMoneyDisplay();
+        
+        currentCustomerPotion = null; // Satıştan sonra mevcut müşteri talebini temizle
+        // saveGameData() burada zaten showNextCustomer içinde çağrılacak
+        playSound('sound-sell-potion');
+        showNextCustomer(); // Yeni müşteri hemen gelsin
       } else {
-        alert(`Maalesef, elimizde ${potion} yok!`);
+        alert(`Maalesef, elimizde ${potionName} yok!`);
       }
     }
+    
+    function updateMoneyDisplay() {
+        document.getElementById('money').textContent = `Para: ${money} TL`;
+        if (document.getElementById('buy-modal-money')) {
+             document.getElementById('buy-modal-money').textContent = money;
+        }
+        checkAchievement('richAlchemist', money);
+    }
 
-    function showRecipes() {
-      const rc = document.getElementById('recipe-container');
-      rc.style.display = (rc.style.display === 'block') ? 'none' : 'block';
+    function addXP(amount) {
+        if(isNaN(amount)) return;
+        xp += amount;
+        if (xp >= xpToNextLevel) {
+            level++;
+            xp -= xpToNextLevel; // Kalan XP'yi bir sonraki seviyeye aktar
+            xpToNextLevel = Math.floor(xpToNextLevel * 1.2); // Sonraki seviye için gereken XP'yi %20 artır
+            playSound('sound-level-up');
+            alert(`Tebrikler! Seviye ${level} oldunuz!`);
+            renderUpgrades(); 
+        }
+        updateXPBar();
+    }
+
+    function updateXPBar() {
+        document.getElementById('level-info').textContent = `Seviye: ${level}`;
+        const progress = Math.min((xp / xpToNextLevel) * 100, 100); // %100'ü geçmesin
+        const xpBarElement = document.getElementById('xp-bar');
+        xpBarElement.style.width = `${progress}%`;
+        xpBarElement.textContent = `${Math.floor(xp)}/${xpToNextLevel} XP`;
+    }
+
+    function renderUpgrades() {
+        const listDiv = document.getElementById('upgrades-list');
+        listDiv.innerHTML = '';
+        Object.entries(upgrades).forEach(([key, upgrade]) => {
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'upgrade-item';
+            itemDiv.innerHTML = `
+                <strong>${upgrade.name}</strong> (${upgrade.cost} TL): ${upgrade.description}
+            `;
+            const buyButton = document.createElement('button');
+            buyButton.textContent = upgrade.purchased ? "Satın Alındı" : "Satın Al";
+            buyButton.disabled = upgrade.purchased || money < upgrade.cost;
+            buyButton.onclick = () => buyUpgrade(key);
+            itemDiv.appendChild(buyButton);
+            listDiv.appendChild(itemDiv);
+        });
+    }
+
+    function buyUpgrade(upgradeKey) {
+        const upgrade = upgrades[upgradeKey];
+        if (!upgrade.purchased && money >= upgrade.cost) {
+            money -= upgrade.cost;
+            upgrade.purchased = true;
+            if(typeof upgrade.effect === 'function') upgrade.effect(); // Efekti uygula
+            playSound('sound-upgrade');
+            updateMoneyDisplay();
+            renderUpgrades(); // Buton durumunu güncellemek için
+            saveGameData();
+        } else if (upgrade.purchased) {
+            alert("Bu geliştirmeyi zaten satın aldınız!");
+        } else {
+            alert("Yeterli paranız yok!");
+        }
+    }
+
+    function renderAchievements() {
+        const listDiv = document.getElementById('achievements-list');
+        listDiv.innerHTML = '';
+        Object.values(achievements).forEach(ach => {
+            const itemDiv = document.createElement('div');
+            itemDiv.className = `achievement-item ${ach.completed ? 'completed' : ''}`;
+            itemDiv.innerHTML = `<strong>${ach.name}</strong>: ${ach.description}`;
+            if (ach.completed && ach.reward && (ach.reward.money > 0 || ach.reward.xp > 0)) {
+                itemDiv.innerHTML += `<br><span class="achievement-reward">Ödül: ${ach.reward.money}TL, ${ach.reward.xp}XP (Alındı)</span>`;
+            } else if(ach.reward && (ach.reward.money > 0 || ach.reward.xp > 0)) {
+                 itemDiv.innerHTML += `<br><span class="achievement-reward">Ödül: ${ach.reward.money}TL, ${ach.reward.xp}XP</span>`;
+            }
+            listDiv.appendChild(itemDiv);
+        });
+    }
+    
+    function checkAchievement(key, value) {
+        const ach = achievements[key];
+        if (ach && !ach.completed) {
+            let conditionMet = false;
+            if (key === 'firstPotion' && totalPotionsMade >= 1) conditionMet = true;
+            else if (key === 'tenRecipes' && value >= 5) conditionMet = true; 
+            else if (key === 'allRecipes' && value >= Object.keys(recipes).length) conditionMet = true;
+            else if (key === 'richAlchemist' && value >= 1000) conditionMet = true;
+            else if (key === 'potionMaster' && value >= 50) conditionMet = true;
+
+            if (conditionMet) {
+                ach.completed = true;
+                if (ach.reward) {
+                    if (ach.reward.money) money += ach.reward.money;
+                    if (ach.reward.xp) addXP(ach.reward.xp);
+                    updateMoneyDisplay();
+                }
+                playSound('sound-achievement');
+                alert(`Başarım Kazanıldı: ${ach.name}!`);
+                renderAchievements(); // Başarım listesini güncelle
+                saveGameData();
+            }
+        }
+    }
+    
+    function showModal(modalId) {
+        if (modalId === 'upgrades-modal') renderUpgrades();
+        if (modalId === 'achievements-modal') renderAchievements();
+        document.getElementById(modalId).style.display = 'flex';
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
     }
 
     function loadGameData() {
-      money = parseInt(localStorage.getItem('money')) || 0;
-      inventory = JSON.parse(localStorage.getItem('inventory')) || {};
-      currentCustomerPotion = localStorage.getItem('currentCustomerPotion') || null;
-      updateInventory();
-      document.getElementById('money').textContent = `Para: ${money} TL`;
+      const savedMoney = localStorage.getItem('simyaMoney');
+      const savedLevel = localStorage.getItem('simyaLevel');
+      const savedXP = localStorage.getItem('simyaXP');
+      const savedXPToNext = localStorage.getItem('simyaXPToNext');
+      const savedPotionInv = localStorage.getItem('simyaPotionInventory');
+      const savedMatInv = localStorage.getItem('simyaMaterialInventory');
+      const savedCustomer = localStorage.getItem('simyaCurrentCustomerPotion');
+      const savedUpgrades = localStorage.getItem('simyaUpgrades');
+      const savedAchievements = localStorage.getItem('simyaAchievements');
+      const savedDiscoveredRecipes = localStorage.getItem('simyaDiscoveredRecipes');
+      const savedTotalPotionsMade = localStorage.getItem('simyaTotalPotionsMade');
+
+
+      money = savedMoney ? parseInt(savedMoney) : 250;
+      level = savedLevel ? parseInt(savedLevel) : 1;
+      xp = savedXP ? parseInt(savedXP) : 0;
+      xpToNextLevel = savedXPToNext ? parseInt(savedXPToNext) : 100;
+      potionInventory = savedPotionInv ? JSON.parse(savedPotionInv) : {};
+      materialInventory = savedMatInv ? JSON.parse(savedMatInv) : {};
+      currentCustomerPotion = savedCustomer === "null" ? null : savedCustomer; // "null" string kontrolü
+      
+      if (savedUpgrades) {
+          const loadedUpgrades = JSON.parse(savedUpgrades);
+          Object.keys(upgrades).forEach(key => {
+              if (loadedUpgrades[key]) {
+                  upgrades[key].purchased = loadedUpgrades[key].purchased;
+                  if (upgrades[key].purchased && typeof upgrades[key].effect === 'function') upgrades[key].effect();
+              }
+          });
+      }
+       if (savedAchievements) {
+          const loadedAchievements = JSON.parse(savedAchievements);
+           Object.keys(achievements).forEach(key => {
+              if (loadedAchievements[key]) {
+                  achievements[key].completed = loadedAchievements[key].completed;
+              }
+          });
+      }
+      discoveredRecipes = savedDiscoveredRecipes ? new Set(JSON.parse(savedDiscoveredRecipes)) : new Set();
+      totalPotionsMade = savedTotalPotionsMade ? parseInt(savedTotalPotionsMade) : 0;
+
+
+      updateMoneyDisplay();
+      updateXPBar();
+      updatePotionInventoryDisplay();
+      updateMaterialInventoryDisplay();
+      renderUpgrades();
+      renderAchievements();
 
       if (currentCustomerPotion) {
         showCustomer(currentCustomerPotion);
@@ -505,10 +932,22 @@
     }
 
     function saveGameData() {
-      localStorage.setItem('money', money);
-      localStorage.setItem('inventory', JSON.stringify(inventory));
-      localStorage.setItem('currentCustomerPotion', currentCustomerPotion);
+      localStorage.setItem('simyaMoney', money);
+      localStorage.setItem('simyaLevel', level);
+      localStorage.setItem('simyaXP', xp);
+      localStorage.setItem('simyaXPToNext', xpToNextLevel);
+      localStorage.setItem('simyaPotionInventory', JSON.stringify(potionInventory));
+      localStorage.setItem('simyaMaterialInventory', JSON.stringify(materialInventory));
+      localStorage.setItem('simyaCurrentCustomerPotion', currentCustomerPotion);
+      localStorage.setItem('simyaUpgrades', JSON.stringify(upgrades));
+      localStorage.setItem('simyaAchievements', JSON.stringify(achievements));
+      localStorage.setItem('simyaDiscoveredRecipes', JSON.stringify(Array.from(discoveredRecipes)));
+      localStorage.setItem('simyaTotalPotionsMade', totalPotionsMade);
     }
+    
+    document.querySelectorAll('.material-item').forEach(item => {
+        item.addEventListener('click', () => openBuyMaterialModal(item.dataset.name));
+    });
 
     window.onload = loadGameData;
   </script>
